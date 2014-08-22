@@ -43,6 +43,9 @@ Failure.prototype.concat = function(other){
 Failure.prototype.traverse = function(f, pure) { return pure(this); };
 
 Validation.prototype.of = Validation.of = Failure.of = Success.of = Success;
+Validation.prototype.ap = function(v){
+  return this.chain(function(f){return v.map(f)});
+};
 Validation.Success = Success;
 Validation.Failure = Failure;
 
