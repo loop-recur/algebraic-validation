@@ -1,0 +1,39 @@
+{
+  "name": "validation-algebra",
+  "version": "0.1.0",
+  "description": "Semigroup + Monad for doing validations in Javascript",
+  "main": "validation.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "chai": "~1.9.1",
+    "claire": "~0.4.1",
+    "lodash": "~2.4.1"
+  },
+  "devDependencies": {
+    "chai": "~1.9.1",
+    "lodash": "~2.4.1",
+    "claire": "~0.4.1",
+    "mocha": "~1.21.4"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loop-recur/algebraic-validation.git"
+  },
+  "keywords": [
+    "validation",
+    "algebra",
+    "fantasy",
+    "monad",
+    "semigroup"
+  ],
+  "author": "Adam C. Baker <adam.durandal@gmail.com>",
+  "license": "Unlicense",
+  "bugs": {
+    "url": "https://github.com/loop-recur/algebraic-validation/issues"
+  }
+}
