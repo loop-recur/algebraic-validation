@@ -113,14 +113,4 @@ describe('chain', function(){
     assert.deepEqual(v.chain(Success), v);
     return true;
   }).asTest());
-
-  it('flatmaps a success', claire.forAll(successGen).satisfy(function(s){
-    assert.deepEqual(s.chain(mDrop1).value, drop1(s.value));
-    return true;
-  }).asTest());
-
-  it('is a no-op for failure', claire.forAll(failureGen).satisfy(function(f){
-    assert.deepEqual(f.chain(mDrop1), f);
-    return true;
-  }).asTest());
 });
