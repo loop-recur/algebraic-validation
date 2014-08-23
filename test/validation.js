@@ -92,3 +92,35 @@ describe('ap', function(){
     }).asTest()
   );
 });
+
+describe('chain', function(){
+  var mDrop1 = B(Success)(drop1);
+  var mEmpty = B(Success)(isEmpty);
+
+  it('is associative', claire.forAll(validGen).satisfy(function(v){
+    assert.deepEqual(v.chain(mDrop1).chain(mEmpty),
+      v.chain(function(x){return mDrop1(x).chain(mEmpty)})
+    );
+    return true;
+  }).asTest());
+
+  it('has left identity', claire.forAll(val).satisfy(function(x){
+    assert.deepEqual(Success(x).chain(mDrop1), mDrop1(x));
+    return true;
+  }).asTest());
+
+  it('has right identity', claire.forAll(validGen).satisfy(function(v){
+    assert.deepEqual(v.chain(Success), v);
+    return true;
+  }).asTest());
+
+  it('flatmaps a success', claire.forAll(successGen).satisfy(function(s){
+    assert.deepEqual(s.chain(mDrop1).value, drop1(s.value));
+    return true;
+  }).asTest());
+
+  it('is a no-op for failure', claire.forAll(failureGen).satisfy(function(f){
+    assert.deepEqual(f.chain(mDrop1), f);
+    return true;
+  }).asTest());
+});
