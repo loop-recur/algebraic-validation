@@ -1,0 +1,12 @@
+language: node_js
+node_js:
+  - "0.11"
+  - "0.10"
+notifications:
+  slack: looprecur:FfiAZ0Tphat78Pq8oz6JjtYm
+  email:
+    recipients:
+      - adam@looprecur.com
+      - brian@looprecur.com
+      - ryan@looprecur.com
+      - taylor@looprecur.com
