@@ -14,6 +14,13 @@ var successGen = claire.transform(Success, val);
 var failureGen = claire.transform(Failure, val);
 var validGen = claire.choice(successGen, failureGen);
 
+var Id = require('fantasy-land/id').of
+var Some = require('data.maybe').Just;
+var some = function(x){ return new Some(x); };
+var none = new (require('data.maybe').Nothing);
+
+Array.of = Array.of || function(x){ return [x] };
+
 describe('concat', function(){
   it('is associative',
     claire.forAll(validGen, validGen, validGen).satisfy(function(v1, v2, v3){
@@ -63,6 +70,7 @@ describe('map', function(){
     return true;
   }).asTest());
 
+
   it('maps the inner value of a success',
     claire.forAll(successGen).satisfy(function(s){
       assert.deepEqual(s.map(drop1).value, drop1(s.value));
@@ -111,6 +119,61 @@ describe('chain', function(){
 
   it('has right identity', claire.forAll(validGen).satisfy(function(v){
     assert.deepEqual(v.chain(Success), v);
+    return true;
+  }).asTest());
+});
+
+describe('traverse', function(){
+  function arrayToMaybe(a){return a.length ? some(a[0]) : none};
+  function maybeToArray(m){return m.isJust ? [m.value]  : []  };
+  function idToArray(i){return [i.value]};
+  function idToMaybe(i){return some(i.value)};
+  function idToValid(i){return Success(i.value)};
+  function arrayToValid(a){return a.length ? Success(a[0]) : Failure(['empty'])}
+  function maybeToValid(m){return m.isJust ? Success(m.value)
+    : Failure(['empty']); };
+  var transformGen = claire.choice(
+    {t: arrayToMaybe, i: Array.of, o: some},
+    {t: maybeToArray, i: some, o: Array.of},
+    {t: idToArray, i: Id, o: Array.of},
+    {t: idToMaybe, i: Id, o: some},
+    {t: idToValid, i: Id, o: Success},
+    {t: arrayToValid, i: Array.of, o: Success},
+    {t: maybeToValid, i: some, o: Success}
+  );
+  //wrapping because of generator issue in interchange comment
+  var fGen = claire.choice([drop1], [isEmpty], [arrayToMaybe],
+    [function(a){return a.length;}]);
+
+  it('obeys naturality',
+    claire.forAll(transformGen, fGen, validGen).satisfy(function(t, f, v){
+      var apF = B(t.i)(f[0]);
+      assert.deepEqual(t.t(v.traverse(apF, t.i)),
+        v.traverse(B(t.t)(apF), t.o));
+      return true;
+    }).asTest()
+  );
+
+  it('obeys identity', claire.forAll(validGen).satisfy(function(v){
+    assert.deepEqual(v.traverse(Id, Id), Id(v));
+    return true;
+  }).asTest());
+
+  var _ = require('lodash');
+  function ComposeF(nestedFs){
+    if(this instanceof ComposeF){
+      this.value = nestedFs;
+    } else { return new ComposeF(nestedFs) }
+  };
+  ComposeF.prototype.map = function(f){
+    return new ComposeF(this.value.map(function(x){return x.map(f)}));
+  };
+  it('obeys composition', claire.forAll(validGen).satisfy(function(v){
+    var a = v.traverse(function(a){return ComposeF(drop1(a).map(some))},
+      function(x){return ComposeF(Array.of(some(x)))}
+    );
+    var b = ComposeF(v.traverse(drop1, Array.of).map(function(x){return x.traverse(some, some)}));
+    assert.deepEqual(a, b);
     return true;
   }).asTest());
 });

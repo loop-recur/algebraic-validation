@@ -15,7 +15,9 @@
     "chai": "~1.9.1",
     "lodash": "~2.4.1",
     "claire": "~0.4.1",
-    "mocha": "~1.21.4"
+    "mocha": "~1.21.4",
+    "fantasy-land": "~0.1.0",
+    "data.maybe": "~1.0.3"
   },
   "scripts": {
     "test": "mocha"
