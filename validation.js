@@ -10,13 +10,9 @@ function Success(val) {
 Success.prototype = new Validation();
 Success.prototype.is_success = true;
 Success.prototype.is_failure = false;
-Success.prototype.map = function(f) {
-  return new Success(f(this.value));
-}
 Success.prototype.chain = function(f){
   return f(this.value);
 }
-Success.prototype.join = function(){ return this.value; }
 Success.prototype.concat = function(other){ return other; };
 Success.prototype.traverse = function(f, pure) {
   return f(this.value).map(Success);
@@ -33,9 +29,7 @@ function Failure(val) {
 Failure.prototype = new Validation();
 Failure.prototype.is_success = false;
 Failure.prototype.is_failure = true;
-Failure.prototype.map = function(f){ return this; }
 Failure.prototype.chain = function(f){ return this; }
-Failure.prototype.join = function(f){ return this; }
 Failure.prototype.concat = function(other){
   return other.is_success ? this :
     new Failure(this.value.concat(other.value));
@@ -43,6 +37,10 @@ Failure.prototype.concat = function(other){
 Failure.prototype.traverse = function(f, pure) { return pure(this); };
 
 Validation.prototype.of = Validation.of = Failure.of = Success.of = Success;
+Validation.prototype.map = function(f) {
+  var v = this;
+  return v.chain(function(a) { return new Success(f(a)); })
+};
 Validation.prototype.ap = function(v){
   return this.chain(function(f){return v.map(f)});
 };
