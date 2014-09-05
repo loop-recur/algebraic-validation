@@ -1,6 +1,6 @@
 {
   "name": "validation-algebra",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Semigroup + Monad for doing validations in Javascript",
   "main": "validation.js",
   "directories": {

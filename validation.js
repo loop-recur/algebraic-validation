@@ -45,6 +45,9 @@ Validation.prototype.map = function(f) {
 Validation.prototype.ap = function(v){
   return this.chain(function(f){return v.map(f)});
 };
+Validation.prototype.join = function(){
+  return this.chain(I);
+};
 Validation.prototype.sequence = function(of){
   return this.traverse(I, of);
 };
