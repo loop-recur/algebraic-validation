@@ -1,5 +1,5 @@
 function Validation() {};
-function I = function(x){return x};
+function I(x){return x};
 
 function Success(val) {
   if(this instanceof Success){
