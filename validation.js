@@ -1,4 +1,5 @@
 function Validation() {};
+function I = function(x){return x};
 
 function Success(val) {
   if(this instanceof Success){
@@ -43,6 +44,9 @@ Validation.prototype.map = function(f) {
 };
 Validation.prototype.ap = function(v){
   return this.chain(function(f){return v.map(f)});
+};
+Validation.prototype.sequence = function(of){
+  return this.traverse(I, of);
 };
 Validation.Success = Success;
 Validation.Failure = Failure;
