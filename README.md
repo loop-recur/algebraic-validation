@@ -104,7 +104,7 @@ side effects. They all return values that are an `instanceof Validation`.
 - `instanceOfA.sequence(A.of)`: Assuming `instanceOfA` is a validation
   with another applicative `A` inside (say, an `Array`), `sequence` tranforms
   it to an `A` of a `Validation` (eg, transforms a `Validation` of an `Array`
-  to an `Array` of `Validation`s.
+  to an `Array` of `Validation`s).
 
 - `instance.traverse(f, fOf)`: First `map`s `f` over `instance`, then
   `sequence`s the result.
