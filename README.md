@@ -96,7 +96,7 @@ side effects. They all return values that are an `instanceof Validation`.
   it applies the function in the first instance to the arg in the second.
   Otherwise, returns the first failure (the function failure precedes the arg).
 
-- `instance.chain(function(value){/*transform value into a new Validation*/}:
+- `instance.chain(function(value){/*transform value into a new Validation*/}`:
   `map`s the given `Validation` generating function, then flattens the
   nested validation. Like `map`, this simply returns `instance` if it
   `is_failure`.
